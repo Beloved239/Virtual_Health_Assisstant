@@ -6,7 +6,6 @@ import com.Vitality_Hub.Virtual_Health_Assisstant.patient.dto.GetRequest;
 import com.Vitality_Hub.Virtual_Health_Assisstant.patient.dto.PatientRequest;
 import com.Vitality_Hub.Virtual_Health_Assisstant.patient.service.PatientService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,7 +37,6 @@ public class PatientController {
     }
 
     @PutMapping("/resetpassword")
-//    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Response> resetPassword(@RequestBody LoginRequest loginRequest){
         return patientService.resetPassword(loginRequest);
     }

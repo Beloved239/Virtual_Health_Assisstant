@@ -1,0 +1,34 @@
+spring:
+  profiles:
+    active: spring.profiles.active
+#  datasource:
+#    url: jdbc:mysql://localhost:3306/vitality_hub
+#    username: root
+#    password: Adettob@239@239
+
+
+server:
+  port: 5000
+
+#openai:
+#  model: gpt-3.5-turbo
+#  api:
+#    url: https://api.openai.com/v1/chat/completions
+#    key: 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
+
+
+
+#  mail:
+#    host: smtp.gmail.com
+#    port: 465
+#    username: adettob@gmail.com
+#    password: lxzfsogbrdlwlwea
+#    properties:
+#      mail:
+#        smtp:
+#          auth: true
+#          starttls.enable: true
+#          smtp.ssl.enable: true
+
+
+

@@ -30,7 +30,7 @@ public class PatientServiceImpl implements PatientService {
     private final EmailService emailService;
     private final AuthenticationManager authenticationManager;
 
-    public PatientServiceImpl(PatientRepository patientRepository, PasswordEncoder passwordEncoder, EmailService emailService, AuthenticationManager authenticationManager){
+    public PatientServiceImpl(PatientRepository patientRepository, EmailService emailService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager){
         this.patientRepository = patientRepository;
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
@@ -153,7 +153,6 @@ public class PatientServiceImpl implements PatientService {
                     .data(null)
                     .build();
         }else {
-
         Patients patients = patientRepository.findByEmail(email).get();
         return Response.builder()
                 .responseCode(ResponseUtils.SUCCESS_MESSAGE_CODE)

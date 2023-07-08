@@ -45,7 +45,6 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "api/patient/signup").permitAll()
                         .requestMatchers(HttpMethod.POST, "api/patient/signin").permitAll()
                         .requestMatchers(HttpMethod.PUT, "api/patient/resetpassword").hasAuthority("USER")
-
                         .anyRequest().authenticated())
                         .httpBasic(Customizer.withDefaults());
 

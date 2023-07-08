@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: com.Vitality_Hub.Virtual_Health_Assisstant.VirtualHealthAssi
+ sstantApplication
+
