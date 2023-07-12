@@ -1,14 +1,13 @@
 package com.Vitality_Hub.Virtual_Health_Assisstant.patient.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class GetRequest {
+    @JsonIgnore
     private String email;
 }

@@ -34,46 +34,47 @@ public class AdminServiceImpl implements AdminService{
     }
 
     @Override
-    public ResponseEntity<Response> signUp(PatientRequest patientRequest) {
+    public ResponseEntity<Response> adminSignUp(PatientRequest patientRequest) {
         boolean isEmailExist = patientRepository.existsByEmail(patientRequest.getEmail());
         if (isEmailExist) {
             return ResponseEntity.ok(Response.builder()
                     .responseCode(ResponseUtils.USER_EXISTS_CODE)
-                    .responseMessage(ResponseUtils.USER_EXISTS_MESSAGE)
+                    .responseMessage(ResponseUtils.USER_EXISTS_MESSAGE+"yes")
                     .data(null)
                     .build());
+        }else {
+
+            Patients patient = Patients.builder()
+                    .email(patientRequest.getEmail())
+                    .age(patientRequest.getAge())
+                    .firstName(patientRequest.getFirstName())
+                    .lastName(patientRequest.getLastName())
+                    .gender(patientRequest.getGender())
+                    .password(passwordEncoder.encode(patientRequest.getPassword()))
+                    .role(Roles.ADMIN)
+                    .build();
+
+            Patients savedPatient = patientRepository.save(patient);
+
+            String name = savedPatient.getFirstName() + " " + savedPatient.getLastName();
+
+            EmailDetails message = EmailDetails.builder()
+                    .recipient(savedPatient.getEmail())
+                    .subject("Account Created Successfully")
+                    .messageBody("You're Welcome to VitalityHub your username is " + savedPatient.getEmail())
+                    .build();
+            emailService.sendSimpleEmail(message);
+
+            return ResponseEntity.ok(Response.builder()
+                    .responseCode(ResponseUtils.USER_CREATED_MESSAGE)
+                    .responseMessage(ResponseUtils.USER_CREATED_MESSAGE)
+                    .data(Data.builder()
+                            .name(name)
+                            .email(savedPatient.getEmail())
+                            .description("Admin Created Successfully")
+                            .build())
+                    .build());
         }
-
-        Patients patient = Patients.builder()
-                .email(patientRequest.getEmail())
-                .age(patientRequest.getAge())
-                .firstName(patientRequest.getFirstName())
-                .lastName(patientRequest.getLastName())
-                .gender(patientRequest.getGender())
-                .password(passwordEncoder.encode(patientRequest.getPassword()))
-                .role(Roles.ADMIN)
-                .build();
-
-        Patients savedPatient = patientRepository.save(patient);
-
-        String name = savedPatient.getFirstName()+" "+savedPatient.getLastName();
-
-        EmailDetails message = EmailDetails.builder()
-                .recipient(savedPatient.getEmail())
-                .subject("Account Created Successfully")
-                .messageBody("You're Welcome to VitalityHub your username is "+savedPatient.getEmail())
-                .build();
-        emailService.sendSimpleEmail(message);
-
-        return ResponseEntity.ok(Response.builder()
-                .responseCode(ResponseUtils.USER_CREATED_MESSAGE)
-                .responseMessage(ResponseUtils.USER_CREATED_MESSAGE)
-                .data(Data.builder()
-                        .name(name)
-                        .email(savedPatient.getEmail())
-                        .description("Admin Created Successfully")
-                        .build())
-                .build());
     }
 
     @Override

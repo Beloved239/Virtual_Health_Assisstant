@@ -1,5 +1,6 @@
 package com.Vitality_Hub.Virtual_Health_Assisstant.patient.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

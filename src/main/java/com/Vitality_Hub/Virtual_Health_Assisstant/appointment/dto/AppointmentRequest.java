@@ -12,7 +12,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AppointmentRequest {
-    private LocalDate appointmentDate;
+    private String email;
+    private String appointmentDate;
     private String notes;
     private String status;
 

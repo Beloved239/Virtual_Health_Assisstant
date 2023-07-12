@@ -41,11 +41,13 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize-> authorize
                         .requestMatchers(HttpMethod.GET,"api/patient/getall").hasAuthority("ADMIN")
                         .requestMatchers(HttpMethod.GET,"api/patient/getuser").hasAuthority("USER")
-                        .requestMatchers(HttpMethod.POST,"api/chat").hasAuthority("USER")
                         .requestMatchers(HttpMethod.POST, "api/patient/signup").permitAll()
                         .requestMatchers(HttpMethod.POST, "api/patient/signin").permitAll()
                         .requestMatchers(HttpMethod.PUT, "api/patient/resetpassword").hasAuthority("USER")
-                        .anyRequest().authenticated())
+                        .requestMatchers(HttpMethod.POST, "api/admin/signup").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.POST,"api/admin/signin").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.GET,"api/appointment").hasAuthority("USER")
+                        .anyRequest().permitAll())
                         .httpBasic(Customizer.withDefaults());
 
         return http.build();

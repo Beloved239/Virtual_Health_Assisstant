@@ -17,7 +17,7 @@ import java.time.Duration;
 
 @RestController
 @RequestMapping("/api/chat")
-public class ChatController {
+public class VirtualChatController {
 
 //    @Autowired
 //    ChatBotService chatBotService;

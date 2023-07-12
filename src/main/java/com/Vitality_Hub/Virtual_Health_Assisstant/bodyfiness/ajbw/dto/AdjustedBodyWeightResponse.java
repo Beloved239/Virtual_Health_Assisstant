@@ -1,18 +1,17 @@
-package com.Vitality_Hub.Virtual_Health_Assisstant.Response;
+package com.Vitality_Hub.Virtual_Health_Assisstant.bodyfiness.ajbw.dto;
 
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@lombok.Data
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Response {
-
+public class AdjustedBodyWeightResponse {
     private String responseCode;
     private String responseMessage;
-    private Data data;
+    private DataInfo dataInfo;
+
 }
