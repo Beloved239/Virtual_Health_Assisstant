@@ -5,6 +5,7 @@ import com.Vitality_Hub.Virtual_Health_Assisstant.Response.Response;
 import com.Vitality_Hub.Virtual_Health_Assisstant.Security.dto.LoginRequest;
 import com.Vitality_Hub.Virtual_Health_Assisstant.email.dto.EmailDetails;
 import com.Vitality_Hub.Virtual_Health_Assisstant.email.service.EmailService;
+import com.Vitality_Hub.Virtual_Health_Assisstant.patient.dto.GetRequest;
 import com.Vitality_Hub.Virtual_Health_Assisstant.patient.dto.PatientRequest;
 import com.Vitality_Hub.Virtual_Health_Assisstant.patient.entity.Patients;
 import com.Vitality_Hub.Virtual_Health_Assisstant.patient.repository.PatientRepository;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PatientServiceImpl implements PatientService {
@@ -70,7 +72,7 @@ public class PatientServiceImpl implements PatientService {
         emailService.sendSimpleEmail(message);
 
         return ResponseEntity.ok(Response.builder()
-                        .responseCode(ResponseUtils.USER_CREATED_MESSAGE)
+                        .responseCode(ResponseUtils.SUCCESS_MESSAGE_CODE)
                         .responseMessage(ResponseUtils.USER_CREATED_MESSAGE)
                         .data(Data.builder()
                                 .name(name)
@@ -82,38 +84,40 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public ResponseEntity<Response> signIn(LoginRequest loginRequest) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getEmail(),loginRequest.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        boolean exists = patientRepository.existsByEmail(loginRequest.getEmail());
 
-        return new  ResponseEntity<>(
-                Response.builder()
-                        .responseCode(ResponseUtils.SUCCESSFUL_LOGIN_RESPONSE_CODE)
-                        .responseMessage(ResponseUtils.SUCCESSFUL_LOGIN_MESSAGE)
-                        .data(Data.builder()
-                                .name(null)
-                                .email(null)
-                                .description(null)
-                                .build())
-                        .build(), HttpStatus.CREATED);
+        if (!exists ){
+            return ResponseEntity.ok(Response.builder()
+                            .responseCode(ResponseUtils.UNSUCCESSFUL_LOGIN_RESPONSE_CODE)
+                            .responseMessage(ResponseUtils.USERNAME_OR_PASSWORD_INCORRECT_MESSAGE)
+                    .build());
+        }else {
+
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            return new ResponseEntity<>(
+                    Response.builder()
+                            .responseCode(ResponseUtils.SUCCESSFUL_LOGIN_RESPONSE_CODE)
+                            .responseMessage(ResponseUtils.SUCCESSFUL_LOGIN_MESSAGE)
+                            .build(), HttpStatus.CREATED);
+        }
     }
 
     @Override
     public ResponseEntity<Response> resetPassword(LoginRequest loginRequest) {
 
-        boolean existsByEmail = patientRepository.existsByEmail(loginRequest.getEmail());
-        Patients patients = patientRepository.findByEmail(loginRequest.getEmail()).get();
-
-        if (!existsByEmail){
+        if (!patientRepository.existsByEmail(loginRequest.getEmail())){
             return ResponseEntity.ok(Response.builder()
                     .responseCode(ResponseUtils.UNSUCCESSFUL_LOGIN_RESPONSE_CODE)
                     .responseMessage(ResponseUtils.EMAIL_DOES_NOT_EXIST_MESSAGE)
                     .data(null)
                     .build());
         }else {
+            Patients patient = patientRepository.findByEmail(loginRequest.getEmail()).get();
             String encoder = passwordEncoder.encode(loginRequest.getPassword());
-            patients.setPassword(encoder);
-            patientRepository.save(patients);
+            patient.setPassword(encoder);
+            patientRepository.save(patient);
 
             return ResponseEntity.ok(Response.builder()
                             .responseCode(ResponseUtils.SUCCESS_MESSAGE_CODE)
@@ -143,26 +147,26 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public Response getPatientByEmail(String email) {
-        boolean isExistsByEmail= patientRepository.existsByEmail(email);
+    public Response getPatientByEmail(GetRequest getRequest) {
+        boolean isExistsByEmail= patientRepository.existsByEmail(getRequest.getEmail());
+        if (isExistsByEmail){
+            Patients patients = patientRepository.findByEmail(getRequest.getEmail()).get();
+            return Response.builder()
+                    .responseCode(ResponseUtils.SUCCESS_MESSAGE_CODE)
+                    .responseMessage(ResponseUtils.SUCCESS_MESSAGE)
+                    .data(Data.builder()
+                            .name(patients.getFirstName()+" "+ patients.getLastName())
+                            .email(patients.getEmail())
+                            .description(patients.getRole().toString())
+                            .build())
+                    .build();
 
-        if (!isExistsByEmail){
+        }else{
             return Response.builder()
                     .responseCode(ResponseUtils.USER_NOT_FOUND_CODE)
                     .responseMessage(ResponseUtils.USER_NOT_FOUND_MESSAGE)
                     .data(null)
                     .build();
-        }else {
-        Patients patients = patientRepository.findByEmail(email).get();
-        return Response.builder()
-                .responseCode(ResponseUtils.SUCCESS_MESSAGE_CODE)
-                .responseMessage(ResponseUtils.SUCCESS_MESSAGE)
-                .data(Data.builder()
-                        .name(patients.getFirstName()+" "+ patients.getLastName())
-                        .email(patients.getEmail())
-                        .description(patients.getRole().toString())
-                        .build())
-                .build();
-    }
+            }
     }
 }

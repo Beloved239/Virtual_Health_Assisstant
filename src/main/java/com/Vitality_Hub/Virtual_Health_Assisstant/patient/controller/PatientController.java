@@ -43,7 +43,7 @@ public class PatientController {
 
     @GetMapping("/getuser")
     public ResponseEntity<Response> getPatientByUsername(@RequestBody GetRequest getRequest){
-        return ResponseEntity.ok(patientService.getPatientByEmail(getRequest.getEmail()));
+        return ResponseEntity.ok(patientService.getPatientByEmail(getRequest));
     }
 
 }

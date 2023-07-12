@@ -7,6 +7,7 @@ import com.Vitality_Hub.Virtual_Health_Assisstant.patient.dto.PatientRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,12 +22,12 @@ public class AdminController {
     }
 
     @PostMapping("/signup")
-    ResponseEntity<Response> signup(PatientRequest patientRequest){
-        return adminService.signUp(patientRequest);
+    ResponseEntity<Response> signup(@RequestBody PatientRequest patientRequest){
+        return adminService.adminSignUp(patientRequest);
     }
 
     @PostMapping("/signin")
-    ResponseEntity<Response> signin(LoginRequest loginRequest){
+    ResponseEntity<Response> signin(@RequestBody LoginRequest loginRequest){
         return adminService.signIn(loginRequest);
     }
 

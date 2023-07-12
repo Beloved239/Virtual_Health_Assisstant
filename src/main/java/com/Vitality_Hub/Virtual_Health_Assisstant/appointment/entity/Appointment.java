@@ -19,7 +19,7 @@ public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private LocalDate appointmentDate;
+    private String appointmentDate;
     private String notes;
     private String status;
 

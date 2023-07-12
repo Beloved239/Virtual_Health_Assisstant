@@ -1,0 +1,42 @@
+package com.Vitality_Hub.Virtual_Health_Assisstant.bodyfiness.bmi;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.io.IOException;
+
+@RestController
+@RequestMapping("/bmi")
+public class BMIController {
+    private static final String API_URL = "https://body-mass-index-bmi-calculator.p.rapidapi.com/metric?weight=70&height=1.83";
+    private static final String API_KEY = "d7e02fec38msh7f9d9542149a672p1097c2jsn6c0fd1c41384";
+    private static final String API_KEY_NAME = "X-RapidAPI-Key";
+    private static final String API_HOST = "body-mass-index-bmi-calculator.p.rapidapi.com";
+    private static final String API_HOST_NAME = "X-RapidAPI-Host";
+
+
+    private final OkHttpClient client = new OkHttpClient();
+
+    @GetMapping
+    public String getDrugInfo() throws IOException {
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .get()
+                .addHeader(API_KEY_NAME, API_KEY)
+                .addHeader(API_HOST_NAME, API_HOST)
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                return response.body().string();
+            } else {
+                throw new IOException("Request failed: " + response);
+            }
+        }
+    }
+
+}

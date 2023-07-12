@@ -2,6 +2,7 @@ package com.Vitality_Hub.Virtual_Health_Assisstant.patient.entity;
 
 import com.Vitality_Hub.Virtual_Health_Assisstant.appointment.entity.Appointment;
 import com.Vitality_Hub.Virtual_Health_Assisstant.utils.Roles;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 

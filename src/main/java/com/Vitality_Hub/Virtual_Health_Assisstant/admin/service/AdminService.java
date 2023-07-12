@@ -6,7 +6,7 @@ import com.Vitality_Hub.Virtual_Health_Assisstant.patient.dto.PatientRequest;
 import org.springframework.http.ResponseEntity;
 
 public interface AdminService {
-    ResponseEntity<Response> signUp(PatientRequest patientRequest);
+    ResponseEntity<Response> adminSignUp(PatientRequest patientRequest);
 
     ResponseEntity<Response> signIn(LoginRequest loginRequest);
 }
